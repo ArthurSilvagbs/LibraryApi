@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.UUID;
 
@@ -24,7 +25,7 @@ public class Livro {
     private String titulo;
 
     @Column(name = "data_publicacao", nullable = false)
-    private Date dataPublicacao;
+    private LocalDate dataPublicacao;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "genero", length = 30, nullable = false)
@@ -33,14 +34,14 @@ public class Livro {
     @Column(name = "preco", scale = 2, precision = 18)
     private BigDecimal preco;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "autor_id")
     private Autor autor;
 
     public Livro() {
     }
 
-    public Livro(String titulo, Date dataPublicacao, GeneroLivro genero, BigDecimal preco, Autor autor) {
+    public Livro(String titulo, LocalDate dataPublicacao, GeneroLivro genero, BigDecimal preco, Autor autor) {
         this.titulo = titulo;
         this.dataPublicacao = dataPublicacao;
         this.genero = genero;
