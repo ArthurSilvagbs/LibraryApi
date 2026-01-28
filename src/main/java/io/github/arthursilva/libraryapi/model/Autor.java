@@ -3,6 +3,7 @@ package io.github.arthursilva.libraryapi.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "autor")
-@Getter @Setter
+@Getter @Setter @ToString
 public class Autor {
 
     @Id
