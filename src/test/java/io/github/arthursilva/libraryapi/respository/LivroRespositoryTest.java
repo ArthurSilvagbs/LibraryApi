@@ -28,11 +28,11 @@ public class LivroRespositoryTest {
     @Test
     void salvarTest() {
         Livro livro = new Livro();
-        livro.setIsbn("90887-84874");
-        livro.setTitulo("Duna");
-        livro.setPreco(BigDecimal.valueOf(100));
+        livro.setIsbn("90627-82394");
+        livro.setTitulo("Fogo e Sangue");
+        livro.setPreco(BigDecimal.valueOf(130.50));
         livro.setGenero(GeneroLivro.FICCAO);
-        livro.setDataPublicacao(LocalDate.of(1980, 1, 2));
+        livro.setDataPublicacao(LocalDate.of(2008, 5, 30));
 
         Autor autor = autorRepository.findById(UUID.fromString("bec92156-50cd-455d-8029-a10cc2b9129d")).orElse(null);
 
@@ -123,6 +123,12 @@ public class LivroRespositoryTest {
         System.out.println(livro.getTitulo());
         System.out.println("Autor: ");
         System.out.println(livro.getAutor().getNome());
+    }
+
+    @Test
+    void pesquisaPorTituloTest() {
+        List<Livro> lista = repository.findByTitulo("Fogo e Sangue");
+        lista.forEach(System.out::println);
     }
 
 }
