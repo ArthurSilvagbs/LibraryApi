@@ -29,12 +29,12 @@ public class LivroRespositoryTest {
     void salvarTest() {
         Livro livro = new Livro();
         livro.setIsbn("90627-82394");
-        livro.setTitulo("Fogo e Sangue");
+        livro.setTitulo("Ciencias");
         livro.setPreco(BigDecimal.valueOf(130.50));
-        livro.setGenero(GeneroLivro.FICCAO);
+        livro.setGenero(GeneroLivro.CIENCIA);
         livro.setDataPublicacao(LocalDate.of(2008, 5, 30));
 
-        Autor autor = autorRepository.findById(UUID.fromString("bec92156-50cd-455d-8029-a10cc2b9129d")).orElse(null);
+        Autor autor = autorRepository.findById(UUID.fromString("72614ca0-6826-42e8-b084-5e37d951371f")).orElse(null);
 
         livro.setAutor(autor);
 
@@ -132,9 +132,13 @@ public class LivroRespositoryTest {
     }
 
     @Test
-    void lsitarPorGeneroQueryParamTest() {
-        var resultado = repository.findByGenero(GeneroLivro.FICCAO, "dataPublicacao");
-        resultado.forEach(System.out::println6);
+    void deletePorGeneroTest(){
+        repository.deleteByGenero(GeneroLivro.CIENCIA);
+    }
+
+    @Test
+    void updateDataPublicacaoTest(){
+        repository.updateDataPublicacao(LocalDate.of(2000, 1, 1));
     }
 
 }

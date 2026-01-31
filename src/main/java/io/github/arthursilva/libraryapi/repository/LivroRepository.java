@@ -3,9 +3,12 @@ package io.github.arthursilva.libraryapi.repository;
 import io.github.arthursilva.libraryapi.model.Autor;
 import io.github.arthursilva.libraryapi.model.GeneroLivro;
 import io.github.arthursilva.libraryapi.model.Livro;
+import org.springframework.cglib.core.Local;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -18,13 +21,6 @@ public interface LivroRepository extends JpaRepository<Livro, UUID> {
 
     List<Livro> findByTitulo(String titulo);
 
-    List<Livro> findByDataPublicacaoBetween(LocalDate inicio, LocalDate fim);
-
-    List<Livro> findByTituloLike();
-
-    @Query("SELECT * FROM livro")
-    List<Livro> listarTodos();
-
     @Query("""
             select l.genero
             from Livro l
@@ -36,4 +32,14 @@ public interface LivroRepository extends JpaRepository<Livro, UUID> {
 
     @Query("select l from Livro l where l.genero = :genero order by :paramOrdenacao")
     List<Livro> findByGenero(@Param("genero") GeneroLivro generoLivro, @Param("paramOrdenacao") String nomePropriedade);
+
+    @Modifying
+    @Transactional
+    @Query("delete from Livro where genero = ?1")
+    void deleteByGenero(GeneroLivro genero);
+
+    @Modifying
+    @Transactional
+    @Query("update Livro set dataPublicacao = ?1")
+    void updateDataPublicacao(LocalDate novaData);
 }
