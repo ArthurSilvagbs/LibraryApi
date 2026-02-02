@@ -3,6 +3,7 @@ package io.github.arthursilva.libraryapi.controller;
 import io.github.arthursilva.libraryapi.controller.dto.AutorDTO;
 import io.github.arthursilva.libraryapi.model.Autor;
 import io.github.arthursilva.libraryapi.service.AutorService;
+import org.apache.logging.log4j.message.StringFormattedMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,5 +43,21 @@ public class AutorController {
 
         return ResponseEntity.notFound().build();
     }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> deletar(@PathVariable("id") String id) {
+        UUID idAutor = UUID.fromString(id);
+        Optional<Autor> autorOptional = service.obterPorId(idAutor);
+
+        if (autorOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        service.deletar(autorOptional.get());
+
+        return ResponseEntity.noContent().build();
+    }
+
+
 
 }
