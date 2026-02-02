@@ -2,6 +2,7 @@ package io.github.arthursilva.libraryapi.service;
 
 import io.github.arthursilva.libraryapi.model.Autor;
 import io.github.arthursilva.libraryapi.repository.AutorRepository;
+import io.github.arthursilva.libraryapi.validator.AutorValidator;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,19 +13,23 @@ import java.util.UUID;
 public class AutorService {
 
     private final AutorRepository repository;
+    private final AutorValidator validator;
 
-    private AutorService(AutorRepository autorRepository) {
+    private AutorService(AutorRepository autorRepository, AutorValidator validator) {
         this.repository = autorRepository;
+        this.validator = validator;
     }
 
     public Autor salvar(Autor autor) {
+        validator.validar(autor);
         return repository.save(autor);
     }
 
     public void atualizar(Autor autor) {
         if (autor.getId() == null) {
-            throw new IllegalArgumentException("Para atualizr, é necessário que o autor esteja salvo no banco de dados.");
+            throw new IllegalArgumentException("Para atualizar, é necessário que o autor esteja salvo no banco de dados.");
         }
+        validator.validar(autor);
         repository.save(autor);
     }
 

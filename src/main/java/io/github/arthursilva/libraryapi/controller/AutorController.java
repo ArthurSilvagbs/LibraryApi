@@ -2,6 +2,7 @@ package io.github.arthursilva.libraryapi.controller;
 
 import io.github.arthursilva.libraryapi.controller.dto.AutorDTO;
 import io.github.arthursilva.libraryapi.controller.dto.ErroResposta;
+import io.github.arthursilva.libraryapi.exceptions.RegistroDuplicadoException;
 import io.github.arthursilva.libraryapi.model.Autor;
 import io.github.arthursilva.libraryapi.service.AutorService;
 import org.springframework.http.ResponseEntity;
@@ -25,13 +26,18 @@ public class AutorController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> salvar(@RequestBody AutorDTO autorDTO) {
-        Autor autorEntidade = autorDTO.mapearParaAutor();
-        service.salvar(autorEntidade);
+    public ResponseEntity<Object> salvar(@RequestBody AutorDTO autorDTO) {
+        try {
+            Autor autorEntidade = autorDTO.mapearParaAutor();
+            service.salvar(autorEntidade);
 
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(autorEntidade.getId()).toUri();
+            URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(autorEntidade.getId()).toUri();
 
-        return ResponseEntity.created(location).build();
+            return ResponseEntity.created(location).build();
+        } catch (RegistroDuplicadoException e) {
+            var erroDTO = ErroResposta.conflito(e.getMessage());
+            return ResponseEntity.status(erroDTO.status()).body(erroDTO);
+        }
     }
 
     @GetMapping("{id}")
@@ -78,24 +84,27 @@ public class AutorController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Void> atualizar(@PathVariable("id") String id, @RequestBody AutorDTO dto) {
-        UUID idAutor = UUID.fromString(id);
-        Optional<Autor> autorOptional = service.obterPorId(idAutor);
+    public ResponseEntity<Object> atualizar(@PathVariable("id") String id, @RequestBody AutorDTO dto) {
+        try {
+            UUID idAutor = UUID.fromString(id);
+            Optional<Autor> autorOptional = service.obterPorId(idAutor);
 
-        if (autorOptional.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            if (autorOptional.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            var autor = autorOptional.get();
+            autor.setNome(dto.nome());
+            autor.setNacionalidade(dto.nacionalidade());
+            autor.setDataNascimento(dto.dataNascimento());
+
+            service.atualizar(autor);
+
+            return ResponseEntity.noContent().build();
+        } catch (RegistroDuplicadoException e) {
+            var erroDTO = ErroResposta.conflito(e.getMessage());
+            return ResponseEntity.status(erroDTO.status()).body(erroDTO);
         }
-
-        var autor = autorOptional.get();
-        autor.setNome(dto.nome());
-        autor.setNacionalidade(dto.nacionalidade());
-        autor.setDataNascimento(dto.dataNascimento());
-
-        service.atualizar(autor);
-
-        return ResponseEntity.noContent().build();
     }
-
-
 
 }
