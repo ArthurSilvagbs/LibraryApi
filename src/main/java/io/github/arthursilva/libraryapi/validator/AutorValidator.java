@@ -27,11 +27,16 @@ public class AutorValidator {
                 autor.getNome(), autor.getDataNascimento(), autor.getNacionalidade()
         );
 
-        if (autor.getId() == null) {
-            return autorEncontrado.isPresent();
+        if (autorEncontrado.isEmpty()) {
+            return false;
         }
 
-        return autor.getId().equals(autorEncontrado.get().getId()) && autorEncontrado.isPresent();
+        if (autor.getId() == null) {
+            return true;
+        }
+
+        // Se achou alguém E o ID é diferente do que estou editando, então é um duplicado real
+        return !autor.getId().equals(autorEncontrado.get().getId());
     }
 
 }
