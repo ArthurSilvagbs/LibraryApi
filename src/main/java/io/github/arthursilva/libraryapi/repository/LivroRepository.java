@@ -21,6 +21,8 @@ public interface LivroRepository extends JpaRepository<Livro, UUID> {
 
     List<Livro> findByTitulo(String titulo);
 
+    boolean existsByAutor(Autor autor);
+
     @Query("""
             select l.genero
             from Livro l
@@ -42,4 +44,6 @@ public interface LivroRepository extends JpaRepository<Livro, UUID> {
     @Transactional
     @Query("update Livro set dataPublicacao = ?1")
     void updateDataPublicacao(LocalDate novaData);
+
+
 }

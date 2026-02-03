@@ -2,9 +2,12 @@ package io.github.arthursilva.libraryapi.controller;
 
 import io.github.arthursilva.libraryapi.controller.dto.AutorDTO;
 import io.github.arthursilva.libraryapi.controller.dto.ErroResposta;
+import io.github.arthursilva.libraryapi.exceptions.OperacaoNaoPermitidaException;
 import io.github.arthursilva.libraryapi.exceptions.RegistroDuplicadoException;
 import io.github.arthursilva.libraryapi.model.Autor;
 import io.github.arthursilva.libraryapi.service.AutorService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -17,16 +20,13 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("autores")
+@RequiredArgsConstructor
 public class AutorController {
 
     private final AutorService service;
 
-    public AutorController(AutorService service) {
-        this.service = service;
-    }
-
     @PostMapping
-    public ResponseEntity<Object> salvar(@RequestBody AutorDTO autorDTO) {
+    public ResponseEntity<Object> salvar(@RequestBody @Valid AutorDTO autorDTO) {
         try {
             Autor autorEntidade = autorDTO.mapearParaAutor();
             service.salvar(autorEntidade);
@@ -54,17 +54,22 @@ public class AutorController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> deletar(@PathVariable("id") String id) {
-        UUID idAutor = UUID.fromString(id);
-        Optional<Autor> autorOptional = service.obterPorId(idAutor);
+    public ResponseEntity<Object> deletar(@PathVariable("id") String id) {
+        try {
+            UUID idAutor = UUID.fromString(id);
+            Optional<Autor> autorOptional = service.obterPorId(idAutor);
 
-        if (autorOptional.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            if (autorOptional.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            service.deletar(autorOptional.get());
+
+            return ResponseEntity.noContent().build();
+        } catch (OperacaoNaoPermitidaException e) {
+            var erroResposta = ErroResposta.respostaPadrao(e.getMessage());
+            return ResponseEntity.status(erroResposta.status()).body(erroResposta);
         }
-
-        service.deletar(autorOptional.get());
-
-        return ResponseEntity.noContent().build();
     }
 
     @GetMapping

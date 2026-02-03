@@ -33,7 +33,7 @@ public class Autor {
     @Column(name = "nacionalidade", nullable = false, length = 50)
     private String nacionalidade;
 
-    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "autor", fetch = FetchType.LAZY)
     private List<Livro> livros;
 
     @CreatedDate

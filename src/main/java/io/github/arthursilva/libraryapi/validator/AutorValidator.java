@@ -35,7 +35,6 @@ public class AutorValidator {
             return true;
         }
 
-        // Se achou alguém E o ID é diferente do que estou editando, então é um duplicado real
         return !autor.getId().equals(autorEncontrado.get().getId());
     }
 
