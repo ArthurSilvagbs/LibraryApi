@@ -1,5 +1,5 @@
 # Checar porta disponivel
-netstat -aof | findstr 5432]
+netstat -aof | findstr 5432
 
 # Criar networkinterna no docker
 docker create network library-network
