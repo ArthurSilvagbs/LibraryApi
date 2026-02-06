@@ -67,7 +67,7 @@ public class Livro {
         this.autor = autor;
     }
 
-    public Livro(UUID id, String isbn, String titulo, LocalDate dataPublicacao, GeneroLivro genero, BigDecimal preco, Autor autor) {
+    public Livro(String isbn, String titulo, LocalDate dataPublicacao, GeneroLivro genero, BigDecimal preco, Autor autor) {
         this.isbn = isbn;
         this.titulo = titulo;
         this.dataPublicacao = dataPublicacao;

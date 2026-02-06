@@ -30,10 +30,10 @@ public record CadastroLivroDTO(
         BigDecimal preco,
 
         @NotNull(message = "campo obrigatorio")
-        UUID idAutor){
+        UUID idAutor) {
 
-    public Livro mapearParaLivro() {
-        return new Livro(this.isbn, this.titulo, this.dataPublicacao, this.genero, this.preco, this.idAutor);
-    }
+//    public Livro mapearParaLivro() {
+//        return new Livro(this.isbn, this.titulo, this.dataPublicacao, this.genero, this.preco, this.idAutor);
+//    }
 
 }
