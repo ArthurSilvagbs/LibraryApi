@@ -66,4 +66,13 @@ public class Livro {
         this.preco = preco;
         this.autor = autor;
     }
+
+    public Livro(UUID id, String isbn, String titulo, LocalDate dataPublicacao, GeneroLivro genero, BigDecimal preco, Autor autor) {
+        this.isbn = isbn;
+        this.titulo = titulo;
+        this.dataPublicacao = dataPublicacao;
+        this.genero = genero;
+        this.preco = preco;
+        this.autor = autor;
+    }
 }
