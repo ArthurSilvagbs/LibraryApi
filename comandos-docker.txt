@@ -9,3 +9,8 @@ docker run --name librarydb -p 5432:5432 -e POSTGRES_PASSWORD=postgres -e POSTGR
 
 # Rodar pgadmin4
 docker run --name pgadmin4 -p 15432:80 -e PGADMIN_DEFAULT_EMAIL=admin@admin.com -e PGADMIN_DEFAULT_PASSWORD=admin --network library-network  dpage/pgadmin4
+
+
+docker run --name bytebank-db --network library-network -e POSTGRES_PASSWORD=senha1234 POSTGRES_USER=root -p 5433:5432 -d postgres
+
+docker run --name bytebankdb --network library-network -p 5433:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=senha123 -e POSTGRES_DB=bytebank -d postgres:17
