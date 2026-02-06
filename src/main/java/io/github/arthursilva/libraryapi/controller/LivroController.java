@@ -27,17 +27,18 @@ public class LivroController {
     public ResponseEntity<Object> salvar(@RequestBody @Valid CadastroLivroDTO dto) {
         try {
 
-            Livro livro = dto.mapearParaLivro();
-
-            service.salvar(livro);
-
-            URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest()
-                    .path("/{id}")
-                    .buildAndExpand(livro.getId())
-                    .toUri();
-
-            return ResponseEntity.created(location).build();
+//            Livro livro = dto.mapearParaLivro();
+//
+//            service.salvar(livro);
+//
+//            URI location = ServletUriComponentsBuilder
+//                    .fromCurrentRequest()
+//                    .path("/{id}")
+//                    .buildAndExpand(livro.getId())
+//                    .toUri();
+//
+//            return ResponseEntity.created(location).build();
+            return ResponseEntity.ok(dto);
         } catch (RegistroDuplicadoException e) {
             var erroDTO = ErroResposta.conflito(e.getMessage());
             return ResponseEntity.status(erroDTO.status()).body(erroDTO);
