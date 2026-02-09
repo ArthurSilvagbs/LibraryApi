@@ -1,17 +1,13 @@
 package io.github.arthursilva.libraryapi.controller;
 
 import io.github.arthursilva.libraryapi.controller.dto.AutorDTO;
-import io.github.arthursilva.libraryapi.controller.dto.ErroResposta;
 import io.github.arthursilva.libraryapi.controller.mappers.AutorMapper;
-import io.github.arthursilva.libraryapi.exceptions.OperacaoNaoPermitidaException;
-import io.github.arthursilva.libraryapi.exceptions.RegistroDuplicadoException;
 import io.github.arthursilva.libraryapi.model.Autor;
 import io.github.arthursilva.libraryapi.service.AutorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
@@ -28,7 +24,7 @@ public class AutorController implements GenericController{
     private final AutorMapper mapper;
 
     @PostMapping
-    public ResponseEntity<Object> salvar(@RequestBody @Valid AutorDTO dto) {
+    public ResponseEntity<Void> salvar(@RequestBody @Valid AutorDTO dto) {
         Autor autor = mapper.toEntity(dto);
         service.salvar(autor);
         URI location = gerarHeaderLocation(autor.getId());
@@ -50,7 +46,7 @@ public class AutorController implements GenericController{
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Object> deletar(@PathVariable("id") String id) {
+    public ResponseEntity<Void> deletar(@PathVariable("id") String id) {
         UUID idAutor = UUID.fromString(id);
         Optional<Autor> autorOptional = service.obterPorId(idAutor);
         if (autorOptional.isEmpty()) {
@@ -73,7 +69,7 @@ public class AutorController implements GenericController{
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Object> atualizar(@PathVariable("id") String id, @RequestBody AutorDTO dto) {
+    public ResponseEntity<Void> atualizar(@PathVariable("id") String id, @RequestBody AutorDTO dto) {
         UUID idAutor = UUID.fromString(id);
         Optional<Autor> autorOptional = service.obterPorId(idAutor);
         if (autorOptional.isEmpty()) {
