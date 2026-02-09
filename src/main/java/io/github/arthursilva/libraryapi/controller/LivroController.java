@@ -20,7 +20,7 @@ import java.net.URI;
 @RestController
 @RequestMapping("livros")
 @RequiredArgsConstructor
-public class LivroController {
+public class LivroController implements GenericController{
 
     private final LivroService service;
     private final LivroMapper mapper;
@@ -33,11 +33,7 @@ public class LivroController {
 
             service.salvar(livro);
 
-            URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest()
-                    .path("/{id}")
-                    .buildAndExpand(livro.getId())
-                    .toUri();
+            URI location = gerarHeaderLocation(livro.getId());
 
             return ResponseEntity.ok(livro);
             //return ResponseEntity.created(location).build();
