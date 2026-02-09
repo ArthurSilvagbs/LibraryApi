@@ -12,6 +12,7 @@ public class LivroService {
     private final LivroRepository repository;
 
 
-    public void salvar(Livro livro) {
+    public Livro salvar(Livro livro) {
+        return repository.save(livro);
     }
 }

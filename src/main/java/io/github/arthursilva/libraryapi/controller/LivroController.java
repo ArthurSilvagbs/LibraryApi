@@ -2,6 +2,7 @@ package io.github.arthursilva.libraryapi.controller;
 
 import io.github.arthursilva.libraryapi.controller.dto.CadastroLivroDTO;
 import io.github.arthursilva.libraryapi.controller.dto.ErroResposta;
+import io.github.arthursilva.libraryapi.controller.mappers.LivroMapper;
 import io.github.arthursilva.libraryapi.exceptions.RegistroDuplicadoException;
 import io.github.arthursilva.libraryapi.model.Livro;
 import io.github.arthursilva.libraryapi.service.LivroService;
@@ -22,23 +23,24 @@ import java.net.URI;
 public class LivroController {
 
     private final LivroService service;
+    private final LivroMapper mapper;
 
     @PostMapping
     public ResponseEntity<Object> salvar(@RequestBody @Valid CadastroLivroDTO dto) {
         try {
 
-//            Livro livro = dto.mapearParaLivro();
-//
-//            service.salvar(livro);
-//
-//            URI location = ServletUriComponentsBuilder
-//                    .fromCurrentRequest()
-//                    .path("/{id}")
-//                    .buildAndExpand(livro.getId())
-//                    .toUri();
-//
-//            return ResponseEntity.created(location).build();
-            return ResponseEntity.ok(dto);
+            Livro livro = mapper.toEntity(dto);
+
+            service.salvar(livro);
+
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(livro.getId())
+                    .toUri();
+
+            return ResponseEntity.ok(livro);
+            //return ResponseEntity.created(location).build();
         } catch (RegistroDuplicadoException e) {
             var erroDTO = ErroResposta.conflito(e.getMessage());
             return ResponseEntity.status(erroDTO.status()).body(erroDTO);
