@@ -7,6 +7,7 @@ import io.github.arthursilva.libraryapi.model.Livro;
 import io.github.arthursilva.libraryapi.service.LivroService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.connector.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,11 +31,19 @@ public class LivroController implements GenericController{
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<PesquisaLivroDTO> obterDetalhes(@PathVariable String id) {
+    public ResponseEntity<PesquisaLivroDTO> obterDetalhes(@PathVariable("id") String id) {
         return service.obterPorId(UUID.fromString(id))
                 .map(livro -> {
                     var dto = mapper.toDTO(livro);
                     return ResponseEntity.ok(dto);
+                }).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    public ResponseEntity<Object> deletar(@PathVariable("id") String id) {
+        return service.obterPorId(UUID.fromString(id))
+                .map(livro -> {
+                    service.deletar(livro);
+                    return ResponseEntity.noContent().build();
                 }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
