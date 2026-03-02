@@ -76,6 +76,3 @@ O código está organizado seguindo as melhores práticas de pacotes:
 *   `service`: Camada de serviços com a lógica de negócio.
 *   `validator`: Componentes de validação customizada.
 
----
-
-*Gerado por Manus AI em 27 de fevereiro de 2026.*
